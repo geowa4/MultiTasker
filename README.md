@@ -1,0 +1,1 @@
+This project is meant to be both an experimentation with Scala and Akka as well as a demonstration of their capability to run tasks on multiple nodes.
