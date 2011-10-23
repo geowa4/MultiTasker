@@ -6,7 +6,14 @@ import geowa4.messages._
 import scala.collection.immutable.Queue
 
 object Master {
-  val masterActor = actorOf[Master].start()
+  val serviceName = "job-master"
+  val host = "localhost"
+  val port = 2553
+
+  def main(args: Array[String]) { 
+    remote.start(host, port)
+    remote.register(serviceName, actorOf[Master])
+  }
 }
 
 class Master extends Actor {

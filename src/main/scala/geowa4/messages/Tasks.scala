@@ -6,5 +6,6 @@ sealed trait DistributedMessage
 
 case class Job(process: String, replyTo: ReplyTo) extends DistributedMessage
 case object JobRequest extends DistributedMessage
-case class ReplyTo(actorRef: ActorRef)
+case class JobCompleted(code: Int)
+case class ReplyTo(host: String, port: Int, serviceName: String) extends DistributedMessage
 case object Empty extends DistributedMessage
