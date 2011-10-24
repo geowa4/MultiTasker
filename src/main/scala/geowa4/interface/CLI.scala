@@ -24,6 +24,8 @@ object CLI {
 }
 
 class CLI extends Actor {
+  val replyTo = ReplyTo(CLI.host, CLI.port, CLI.serviceName)
+
   def receive = {
     case ReadLine =>
       read
@@ -38,12 +40,15 @@ class CLI extends Actor {
     Console print "Enter a command to be queued up: "
     val input = Console.readLine()
     if (input == CLI.kill) {
-      println("Killing self")
+      println("Shutting down the CLI.")
       self ! PoisonPill
     } else {
-      remote.actorFor(Master.serviceName, Master.host, Master.port) !
-        Job(input, ReplyTo(CLI.host, CLI.port, CLI.serviceName))
+      masterActor ! Job(input, replyTo)
     }
+  }
+
+  def masterActor = { 
+    remote.actorFor(Master.serviceName, Master.host, Master.port)
   }
 }
 

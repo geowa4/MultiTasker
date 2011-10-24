@@ -10,7 +10,7 @@ object Master {
   val host = "localhost"
   val port = 2553
 
-  def main(args: Array[String]) { 
+  def main(args: Array[String]) {
     remote.start(host, port)
     remote.register(serviceName, actorOf[Master])
   }
@@ -18,6 +18,8 @@ object Master {
 
 class Master extends Actor {
   var q: Queue[Job] = Queue.empty[Job]
+  var shutdown = false
+
   def receive = {
     case j: Job =>
       Console.println("Received Job: " + j)
@@ -25,7 +27,7 @@ class Master extends Actor {
     case JobRequest =>
       q.headOption match {
         case Some(j) =>
-          self reply j
+          self.reply(j)
           q = q.tail
         case None =>
           self reply Empty
